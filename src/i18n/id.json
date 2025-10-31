@@ -1,0 +1,4 @@
+{
+  "nav": { "home": "Beranda", "pmv": "PMV", "gabi": "GABI", "finance": "Laporan" },
+  "home": { "title": "Beranda" }
+}
