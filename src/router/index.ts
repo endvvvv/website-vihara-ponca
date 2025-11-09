@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { setPageMeta } from '@/utils/seo'
 
 const routes = [
-  // src/router/index.ts (cuplikan route)
   {
     path: '/',
     name: 'home',
@@ -35,7 +34,6 @@ const routes = [
   },
 ]
 
-// Satu-satunya instance router
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
@@ -44,12 +42,15 @@ const router = createRouter({
   },
 })
 
-// Hook dipasang ke instance yang sama
 router.afterEach((to) => {
   const title = to.meta.title ?? 'Vihara'
   const description =
     to.meta.description ?? 'Informasi kegiatan rutin Vihara, PMV, dan GABI.'
-  setPageMeta({ title, description })
+  setPageMeta({
+    title,
+    description,
+    image: 'https://viharaavalokitesvara.netlify.app/og.png',
+  })
 })
 
 export default router

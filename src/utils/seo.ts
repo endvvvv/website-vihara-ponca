@@ -3,52 +3,76 @@ type MetaSpec = {
   title: string
   description?: string
   image?: string
-  url?: string
 }
 
-export function setPageMeta({ title, description, image, url }: MetaSpec) {
-  const absoluteUrl = url ?? location.href
-  const absoluteImage = image ? toAbsolute(image) : undefined
+export function setPageMeta({ title, description, image }: MetaSpec) {
+  if (typeof document === 'undefined') return
 
   document.title = title ? `${title} — Vihara` : 'Vihara'
 
-  // Meta
-  upsertMetaName('description', description ?? '')
+  const url = typeof location !== 'undefined' ? location.href : ''
 
-  // Open Graph
-  upsertMetaProp('og:title', title)
-  if (description) upsertMetaProp('og:description', description)
-  upsertMetaProp('og:url', absoluteUrl)
-  if (absoluteImage) upsertMetaProp('og:image', absoluteImage)
+  upsert('meta[name="description"]', 'name', 'description', description ?? '')
 
-  // Twitter
-  upsertMetaName('twitter:card', 'summary_large_image')
-  upsertMetaName('twitter:title', title)
-  if (description) upsertMetaName('twitter:description', description)
-  if (absoluteImage) upsertMetaName('twitter:image', absoluteImage)
+  // OG
+  upsert('meta[property="og:title"]', 'property', 'og:title', title)
+  upsert(
+    'meta[property="og:description"]',
+    'property',
+    'og:description',
+    description ?? ''
+  )
+  if (url) upsert('meta[property="og:url"]', 'property', 'og:url', url)
 
-  // Canonical
-  upsertLinkRel('canonical', absoluteUrl)
+  // image
+  if (image) {
+    const abs = toAbsolute(image)
+    upsert('meta[property="og:image"]', 'property', 'og:image', abs)
+    // sinkron Twitter
+    upsert(
+      'meta[name="twitter:card"]',
+      'name',
+      'twitter:card',
+      'summary_large_image'
+    )
+    upsert('meta[name="twitter:title"]', 'name', 'twitter:title', title)
+    if (description)
+      upsert(
+        'meta[name="twitter:description"]',
+        'name',
+        'twitter:description',
+        description
+      )
+    upsert('meta[name="twitter:image"]', 'name', 'twitter:image', abs)
+  }
+
+  // canonical link
+  if (url) upsertLink('link[rel="canonical"]', 'canonical', url)
 }
 
-function upsertMetaName(name: string, content: string) {
-  upsertMeta({
-    selector: `meta[name="${name}"]`,
-    attr: 'name',
-    key: name,
-    value: content,
-  })
+export function setOgLocale(locale: string) {
+  if (typeof document === 'undefined') return
+  upsert('meta[property="og:locale"]', 'property', 'og:locale', locale)
 }
-function upsertMetaProp(prop: string, content: string) {
-  upsertMeta({
-    selector: `meta[property="${prop}"]`,
-    attr: 'property',
-    key: prop,
-    value: content,
-  })
+
+// -- helpers --
+function upsert(
+  sel: string,
+  attr: 'name' | 'property',
+  key: string,
+  val: string
+) {
+  let el = document.querySelector<HTMLMetaElement>(sel)
+  if (!el) {
+    el = document.createElement('meta')
+    el.setAttribute(attr, key)
+    document.head.appendChild(el)
+  }
+  el.setAttribute('content', val)
 }
-function upsertLinkRel(rel: string, href: string) {
-  let el = document.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`)
+
+function upsertLink(sel: string, rel: string, href: string) {
+  let el = document.querySelector<HTMLLinkElement>(sel)
   if (!el) {
     el = document.createElement('link')
     el.setAttribute('rel', rel)
@@ -56,23 +80,11 @@ function upsertLinkRel(rel: string, href: string) {
   }
   el.setAttribute('href', href)
 }
-function upsertMeta(opts: {
-  selector: string
-  attr: 'name' | 'property'
-  key: string
-  value: string
-}) {
-  let el = document.querySelector<HTMLMetaElement>(opts.selector)
-  if (!el) {
-    el = document.createElement('meta')
-    el.setAttribute(opts.attr, opts.key)
-    document.head.appendChild(el)
-  }
-  el.setAttribute('content', opts.value)
-}
+
 function toAbsolute(path: string) {
-  return /^https?:\/\//i.test(path)
-    ? path
-    : new URL(path, location.origin).toString().replace(/\/$/, '') +
-        (path.startsWith('/') ? path : '/' + path)
+  // sudah absolut
+  if (/^https?:\/\//i.test(path)) return path
+  // relatif -> absolut berbasis origin
+  if (typeof location === 'undefined') return path
+  return new URL(path, location.origin).toString()
 }
