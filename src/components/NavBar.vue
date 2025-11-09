@@ -20,7 +20,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 </script>
 
 <template>
-  <nav class="bg-zinc-950 text-zinc-100">
+  <nav class="bg-zinc-950 text-zinc-100" aria-label="Navigasi utama">
     <div class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
       <router-link to="/" class="font-semibold"
         >Vihara Avalokitesvara</router-link

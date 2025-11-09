@@ -5,9 +5,12 @@ import ts from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
 import vueParser from 'vue-eslint-parser'
 import globals from 'globals'
+import eslintConfigPrettier from 'eslint-config-prettier'
 
 export default [
-  // SFC + TS (kode browser)
+  { ignores: ['dist/', 'node_modules/', '.netlify/', 'coverage/'] },
+
+  // SFC + TS
   {
     files: ['**/*.{js,mjs,cjs,ts,vue}'],
     languageOptions: {
@@ -19,7 +22,7 @@ export default [
         extraFileExtensions: ['.vue'],
       },
       globals: {
-        ...globals.browser, // <-- ini yang hilangkan error 'document' no-undef
+        ...globals.browser,
         ...globals.es2021,
       },
     },
@@ -30,9 +33,10 @@ export default [
       ...ts.configs.recommended.rules,
       'vue/multi-word-component-names': 'off',
     },
+    linterOptions: { reportUnusedDisableDirectives: true },
   },
 
-  // File konfigurasi Node (opsional tapi bagus)
+  // Configuration file Node
   {
     files: [
       'vite.config.ts',
@@ -41,7 +45,11 @@ export default [
       'eslint.config.js',
     ],
     languageOptions: {
+      parser: tsParser,
       globals: { ...globals.node, ...globals.es2021 },
+      sourceType: 'module',
     },
   },
+
+  eslintConfigPrettier,
 ]

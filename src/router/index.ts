@@ -1,30 +1,37 @@
 // src/router/index.ts
 import { createRouter, createWebHistory } from 'vue-router'
+import { setPageMeta } from '@/utils/seo'
 
 const routes = [
+  // src/router/index.ts (cuplikan route)
   {
     path: '/',
     name: 'home',
     component: () => import('@/pages/Home.vue'),
-    meta: { title: 'Beranda' },
+    meta: {
+      title: 'Beranda',
+      description:
+        'Informasi kegiatan rutin, PMV, GABI, dan aktivitas terbaru.',
+    },
   },
   {
     path: '/pmv',
     name: 'pmv',
     component: () => import('@/pages/Pmv.vue'),
-    meta: { title: 'PMV' },
+    meta: {
+      title: 'PMV',
+      description: 'Agenda dan kegiatan Persatuan Muda-Mudi Vihara (PMV).',
+    },
   },
   {
     path: '/gabi',
     name: 'gabi',
     component: () => import('@/pages/Gabi.vue'),
-    meta: { title: 'GABI' },
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'not-found',
-    component: () => import('@/pages/NotFound.vue'),
-    meta: { title: '404' },
+    meta: {
+      title: 'GABI',
+      description:
+        'Informasi kegiatan Gelanggang Anak Buddhis Indonesia (GABI).',
+    },
   },
 ]
 
@@ -39,7 +46,10 @@ const router = createRouter({
 
 // Hook dipasang ke instance yang sama
 router.afterEach((to) => {
-  document.title = (to.meta?.title as string) ?? 'Vihara Avalokitesvara'
+  const title = to.meta.title ?? 'Vihara'
+  const description =
+    to.meta.description ?? 'Informasi kegiatan rutin Vihara, PMV, dan GABI.'
+  setPageMeta({ title, description })
 })
 
 export default router

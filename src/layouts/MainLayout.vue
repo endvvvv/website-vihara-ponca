@@ -1,17 +1,26 @@
+<!-- MainLayout.vue -->
 <script setup lang="ts">
 import NavBar from '@/components/NavBar.vue'
 import AppFooter from '@/components/AppFooter.vue'
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col bg-zinc-900 text-zinc-100">
+  <div class="flex min-h-screen flex-col">
+    <!-- Main content -->
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:m-2 focus:rounded-lg focus:bg-zinc-800 focus:px-3 focus:py-2 focus:text-white"
+    >
+      Lompat ke konten
+    </a>
+
     <NavBar />
+
     <div class="flex-1">
-      <Transition name="fade" mode="out-in">
-        <router-view />
-      </Transition>
+      <RouterView />
     </div>
-    <AppFooter />
+
+    <AppFooter class="mt-auto" />
   </div>
 </template>
 
