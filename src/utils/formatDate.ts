@@ -8,3 +8,4 @@ export function formatDate(
     ...opts,
   }).format(new Date(iso))
 }
+// test

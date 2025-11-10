@@ -23,3 +23,5 @@ Vite + Vue 3 + TS, Tailwind, Vue Router, Pinia, vue-i18n
 - Import alias `@` → `src/`
 - Komponen reusable di `src/components`
 - Data/HTTP di `src/services`
+
+![CI](https://github.com/endvvvv/website-vihara-ponca/actions/workflows/ci.yml/badge.svg)

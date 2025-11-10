@@ -5,12 +5,9 @@ import ts from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
 import vueParser from 'vue-eslint-parser'
 import globals from 'globals'
-import eslintConfigPrettier from 'eslint-config-prettier'
+import prettier from 'eslint-config-prettier'
 
 export default [
-  { ignores: ['dist/', 'node_modules/', '.netlify/', 'coverage/'] },
-
-  // SFC + TS
   {
     files: ['**/*.{js,mjs,cjs,ts,vue}'],
     languageOptions: {
@@ -21,10 +18,7 @@ export default [
         sourceType: 'module',
         extraFileExtensions: ['.vue'],
       },
-      globals: {
-        ...globals.browser,
-        ...globals.es2021,
-      },
+      globals: { ...globals.browser, ...globals.es2021 },
     },
     plugins: { vue, '@typescript-eslint': ts },
     rules: {
@@ -33,23 +27,18 @@ export default [
       ...ts.configs.recommended.rules,
       'vue/multi-word-component-names': 'off',
     },
-    linterOptions: { reportUnusedDisableDirectives: true },
   },
 
-  // Configuration file Node
   {
     files: [
       'vite.config.ts',
+      'vitest.config.ts',
       'postcss.config.cjs',
       'tailwind.config.js',
       'eslint.config.js',
     ],
-    languageOptions: {
-      parser: tsParser,
-      globals: { ...globals.node, ...globals.es2021 },
-      sourceType: 'module',
-    },
+    languageOptions: { globals: { ...globals.node, ...globals.es2021 } },
   },
 
-  eslintConfigPrettier,
+  prettier,
 ]

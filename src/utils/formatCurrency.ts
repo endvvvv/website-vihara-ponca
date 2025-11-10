@@ -1,12 +1,12 @@
+// src/utils/formatCurrency.ts
 export function formatCurrency(
   value: number,
-  locale = 'id-ID',
-  currency = 'IDR',
-  maxFraction = 0
+  opts: { withSymbol?: boolean; maxFraction?: number } = {}
 ) {
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency,
+  const { withSymbol = true, maxFraction = 2 } = opts
+  const formatted = value.toLocaleString('id-ID', {
+    minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
     maximumFractionDigits: maxFraction,
-  }).format(value)
+  })
+  return withSymbol ? `Rp ${formatted}` : formatted
 }

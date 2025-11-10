@@ -8,12 +8,12 @@
     <div class="mt-6 flex gap-3">
       <router-link
         to="/pmv"
-        class="bg-brand-500 hover:bg-brand-600 rounded-xl px-4 py-2 text-white"
+        class="rounded-xl bg-brand-500 px-4 py-2 text-white hover:bg-brand-600"
         >Lihat PMV</router-link
       >
       <router-link
         to="/gabi"
-        class="bg-brand-500 hover:bg-brand-600 rounded-xl px-4 py-2 text-white"
+        class="rounded-xl bg-brand-500 px-4 py-2 text-white hover:bg-brand-600"
         >Lihat GABI</router-link
       >
     </div>
