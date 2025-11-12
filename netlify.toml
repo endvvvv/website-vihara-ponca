@@ -13,14 +13,14 @@
 [[headers]]
   for = "/*"
   [headers.values]
+    # Security
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
-    # HSTS aktif saat pakai domain HTTPS kustom
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
-    # CSP konservatif (cukup untuk Vue+Tailwind)
     Content-Security-Policy = "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; img-src 'self' data: https:; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self';"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/assets/*"
